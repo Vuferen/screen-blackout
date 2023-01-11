@@ -1,31 +1,52 @@
 <script lang="ts">
-  import Greet from './lib/Greet.svelte'
+  import { availableMonitors, currentMonitor, WebviewWindow } from '@tauri-apps/api/window';
+  const monitors = availableMonitors();
+  
+  let debugText = "Not pressed";
+
+  async function blackout() {
+    let monitor = await currentMonitor();
+    console.log(monitor);
+    console.log(await monitors);
+
+    (await monitors).forEach(screen => {
+		if (screen.name != monitor.name) {
+			let windowLabel = screen.name.slice(screen.name.indexOf('D'));
+			windowLabel = windowLabel.replace("1", "One");
+			console.log(windowLabel);
+			console.log(screen.position);
+			const webview = new WebviewWindow(windowLabel, {
+			  	url: 'blackout.html',
+				x: screen.position.x,
+				y: screen.position.y,
+				width: screen.size.width,
+				height: screen.size.height,
+				decorations: false,
+				alwaysOnTop: true,
+				resizable: false,
+				focus: false
+			});
+			webview.once('tauri://created', function () {
+			// webview window successfully created
+				console.log("Yay")
+			});
+			webview.once('tauri://error', function (e) {
+				console.log(e);
+			});
+		}
+    });
+
+
+
+    debugText = "Pressed";
+  }
 </script>
 
 <main class="container">
-  <h1>Welcome to Tauri!</h1>
-
-  <div class="row">
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo vite" alt="Vite Logo" />
-    </a>
-    <a href="https://tauri.app" target="_blank">
-      <img src="/tauri.svg" class="logo tauri" alt="Tauri Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank">
-      <img src="/svelte.svg" class="logo svelte" alt="Svelte Logo" />
-    </a>
+  <span>{debugText}</span>
+  <div class="mt-5">
+    <button on:click={() => blackout()}>Blackout</button>
   </div>
-
-  <p>
-    Click on the Tauri, Vite, and Svelte logos to learn more.
-  </p>
-
-  <div class="row">
-    <Greet />
-  </div>
-
-
 </main>
 
 <style>
