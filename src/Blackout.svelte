@@ -16,7 +16,9 @@
 			unlisten();
 			appWindow.close();
 		});
+		appWindow.show(); // Change this such that the blackout windows are loaded but hidden from the start and the blackout button simply shows the windows.
 	});
+
 
 	function showForTime() {
 		showContent = true;
@@ -28,7 +30,7 @@
 
 </script>
 
-<main style="cursor: {!showContent ? 'none': 'default'};" class=" bg-black w-screen h-screen grid place-items-center" on:mousemove={showForTime}>
+<main  style="cursor: {!showContent ? 'none': 'default'};" class=" bg-black w-screen h-screen grid place-items-center" on:mousemove={showForTime}>
 	{#if showContent}
 		<div class="w-fit h-fit">
 			<button class=" bg-slate-600" on:click={close}>Close</button>

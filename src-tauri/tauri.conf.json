@@ -32,7 +32,7 @@
         "setCursorIcon": false,
         "setCursorPosition": false,
         "setCursorVisible": false,
-        "setDecorations": false,
+        "setDecorations": true,
         "setFocus": false,
         "setFullscreen": true,
         "setIcon": false,
@@ -44,8 +44,8 @@
         "setSize": false,
         "setSkipTaskbar": false,
         "setTitle": false,
-        "show": false,
-        "startDragging": false,
+        "show": true,
+        "startDragging": true,
         "unmaximize": false,
         "unminimize": false
       }
@@ -97,6 +97,10 @@
         "title": "screen-blackout",
         "width": 800
       }
-    ]
+    ],
+    "systemTray": {
+      "iconPath": "icons/icon.png",
+      "iconAsTemplate": false
+    }
   }
 }
