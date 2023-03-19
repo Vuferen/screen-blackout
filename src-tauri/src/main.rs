@@ -18,8 +18,10 @@ fn main() {
     let hide = CustomMenuItem::new("hide".to_string(), "Hide");
     let show = CustomMenuItem::new("show".to_string(), "Show");
     let blackout = CustomMenuItem::new("blackout".to_string(), "Blackout");
+    let stop_blackout = CustomMenuItem::new("stop-blackout".to_string(), "Stop Blackout");
     let tray_menu = SystemTrayMenu::new()
         .add_item(blackout)
+        .add_item(stop_blackout)
         .add_item(hide)
         .add_item(show)
         .add_native_item(SystemTrayMenuItem::Separator)
@@ -36,6 +38,9 @@ fn main() {
                 "blackout" => {
                     _ = app.emit_to("main", "blackout", {});
                 }
+                "stop-blackout" => {
+                  _  = app.emit_to("main", "stop-blackout", {});
+                },
                 "quit" => {
                   std::process::exit(0);
                 }

@@ -7,13 +7,22 @@
 		appWindow,
 	} from "@tauri-apps/api/window";
 	import { onMount } from "svelte";
+	import { register } from '@tauri-apps/api/globalShortcut';
+
 	const monitors = availableMonitors();
+	let isInBlackout = false;
 
 	onMount(async () => {
-		const unlisten = await listen("blackout", (event) => {
-			blackout();
+		// Receive events from taskbar
+		await listen("blackout", (event) => {
+			showBlackouts();
 		});
+		await listen("stop-blackout", (event) => {
+			hideBlackouts();
+		});
+
 		appWindow.setDecorations(false);
+
 		document
 			.getElementById("titlebar-minimize")
 			.addEventListener("click", () => appWindow.minimize());
@@ -24,12 +33,16 @@
 		document
 			.getElementById("titlebar-close")
 			.addEventListener("click", () => appWindow.hide());
+		
+		await register('CommandOrControl+Alt+B', () => {
+			isInBlackout ? hideBlackouts() : showBlackouts();
+		});
+
+		spawnBlackoutWindows();
 	});
 
-	async function blackout() {
+	async function spawnBlackoutWindows() {
 		let monitor = await currentMonitor();
-		console.log(monitor);
-		console.log(await monitors);
 
 		(await monitors).forEach((screen) => {
 			if (screen.name != monitor.name) {
@@ -49,43 +62,34 @@
 					visible: false,
 				});
 
-				webview.once("tauri://created", function () {
-					// webview window successfully created
-					console.log("Yay");
-				});
-				webview.once("tauri://error", function (e) {
-					console.log(e);
-				});
+				// webview.once("tauri://created", function () {
+				// 	// webview window successfully created
+				// 	console.log("Yay");
+				// });
+				// webview.once("tauri://error", function (e) {
+				// 	console.log(e);
+				// });
 			}
 		});
 	}
 	function closeBlackouts() {
 		emit("close");
 	}
+	function hideBlackouts() {
+		emit("hide");
+		isInBlackout = false;
+	}
+	function showBlackouts() {
+		emit("show");
+		isInBlackout = true;
+	}
+
 </script>
 
 <main class="container">
-	<!-- <div data-tauri-drag-region class="titlebar">
-		<div class="titlebar-button" id="titlebar-minimize">
-			<img
-				src="https://api.iconify.design/mdi:window-minimize.svg"
-				alt="minimize"
-			/>
-		</div>
-		<div class="titlebar-button" id="titlebar-maximize">
-			<img
-				src="https://api.iconify.design/mdi:window-maximize.svg"
-				alt="maximize"
-			/>
-		</div>
-		<div class="titlebar-button" id="titlebar-close">
-			<img src="https://api.iconify.design/mdi:close.svg" alt="close" />
-		</div>
-	</div> -->
-
 	<div class="mt-5">
-		<button on:click={() => blackout()}>Blackout</button>
-		<button on:click={() => closeBlackouts()}>Close</button>
+		<button on:click={() => showBlackouts()}>Start Blackout</button>
+		<button on:click={() => hideBlackouts()}>Stop Blackout</button>
 	</div>
 </main>
 

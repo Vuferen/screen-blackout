@@ -6,17 +6,26 @@
 	let showContent = false;
 	let timer;
 
-	function close() {
-		emit("close");
-		appWindow.close();
+	// function close() {
+	// 	emit("close");
+	// 	appWindow.close();
+	// }
+	function hide() {
+		emit("hide");
+		appWindow.hide();
 	}
 	
 	onMount(async () => {
-		const unlisten = await listen("close", (event) => {
-			unlisten();
+		await listen("show", (event) => {
+			appWindow.show();
+		});
+		await listen("hide", (event) => {
+			appWindow.hide();
+		});
+		await listen("close", (event) => {
 			appWindow.close();
 		});
-		appWindow.show(); // Change this such that the blackout windows are loaded but hidden from the start and the blackout button simply shows the windows.
+		//appWindow.show(); // Change this such that the blackout windows are loaded but hidden from the start and the blackout button simply shows the windows.
 	});
 
 
@@ -30,10 +39,10 @@
 
 </script>
 
-<main  style="cursor: {!showContent ? 'none': 'default'};" class=" bg-black w-screen h-screen grid place-items-center" on:mousemove={showForTime}>
+<main style="cursor: {!showContent ? 'none': 'default'};" class=" bg-black w-screen h-screen grid place-items-center" on:mousemove={showForTime}>
 	{#if showContent}
 		<div class="w-fit h-fit">
-			<button class=" bg-slate-600" on:click={close}>Close</button>
+			<button class=" bg-slate-600" on:click={hide}>Close</button>
 		</div>
 	{/if}
 </main>
