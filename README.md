@@ -1,7 +1,15 @@
-# Tauri + Svelte + Typescript
+# Screen Blackout
 
-This template should help get you started developing with Tauri, Svelte and TypeScript in Vite.
+This is a small application to turn monitors black without turning the monitor off. 
+An example use case is to watch content without distractions.
 
-## Recommended IDE Setup
+## Keyboard Shortcut
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
+Use **```Control + Alt + B```** to toggle the blackout.
+
+## Features / Roadmap
+
+The following list shows implemented features marked with ✓ and possible future features:
+* [x] Ability to toggle the blackout with a keyboard shortcut.
+* [ ] Ability to customize the shortcut.
+* [ ] Ability to chose which monitor stays on.
