@@ -42,7 +42,7 @@
 <main style="cursor: {!showContent ? 'none': 'default'};" class=" bg-black w-screen h-screen grid place-items-center" on:mousemove={showForTime}>
 	{#if showContent}
 		<div class="w-fit h-fit">
-			<button class=" bg-slate-600" on:click={hide}>Close</button>
+			<button class=" bg-slate-600" on:click={hide}>Stop Blackout</button>
 		</div>
 	{/if}
 </main>
