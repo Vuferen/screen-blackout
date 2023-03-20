@@ -95,11 +95,11 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
+        "height": 200,
         "resizable": false,
         "decorations": false,
         "title": "Screen Blackout",
-        "width": 800
+        "width": 400
       }
     ],
     "systemTray": {

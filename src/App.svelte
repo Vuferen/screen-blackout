@@ -87,19 +87,53 @@
 </script>
 
 <main class="container">
-	<div class="mt-5">
-		<button on:click={() => showBlackouts()}>Start Blackout</button>
-		<button on:click={() => hideBlackouts()}>Stop Blackout</button>
-	</div>
+	<!-- <h1>Lorem ipsum</h1> -->
+	<!-- <div class="mt-5">
+	</div> -->
+	{#if isInBlackout}
+		<button class="stop" on:click={() => hideBlackouts()}>Stop Blackout</button>
+	{:else}
+		<button class="start" on:click={() => showBlackouts()}>Start Blackout</button>
+	{/if}
 </main>
 
 <style>
-
+	h1 {
+		font-size: 2.7em;
+		margin: 1rem;
+		margin-top: 2rem;
+	}
 	.logo.vite:hover {
 		filter: drop-shadow(0 0 2em #747bff);
 	}
 
 	.logo.svelte:hover {
 		filter: drop-shadow(0 0 2em #ff3e00);
+	}
+	button{
+		border-radius: 0;
+		height: 170px;
+		font-weight: bold;
+		font-size: 2em;
+		border: none;
+	}
+	button:hover{
+		outline: none;
+		border:none;
+	}
+	button.start{
+		background-color: rgb(36, 40, 88);
+	}
+	button.start:hover {
+		background-color: black;
+	}
+	button.stop{
+		background-color: rgb(119, 32, 32);
+	}
+	button.stop:hover{
+		background-color: rgb(139, 18, 18);
+	}
+	.container{
+		height: 100%;
 	}
 </style>
