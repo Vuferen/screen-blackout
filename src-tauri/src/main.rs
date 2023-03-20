@@ -14,15 +14,14 @@ fn greet(name: &str) -> String {
 
 fn main() {
     // here `"quit".to_string()` defines the menu item id, and the second parameter is the menu item label.
-    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
-    let hide = CustomMenuItem::new("hide".to_string(), "Hide");
-    let show = CustomMenuItem::new("show".to_string(), "Show");
-    let blackout = CustomMenuItem::new("blackout".to_string(), "Blackout");
+    let quit = CustomMenuItem::new("quit".to_string(), "Exit");
+    // let hide = CustomMenuItem::new("hide".to_string(), "Hide");
+    let show = CustomMenuItem::new("show".to_string(), "Open Screen Blackout");
+    let blackout = CustomMenuItem::new("blackout".to_string(), "Start Blackout");
     let stop_blackout = CustomMenuItem::new("stop-blackout".to_string(), "Stop Blackout");
     let tray_menu = SystemTrayMenu::new()
         .add_item(blackout)
         .add_item(stop_blackout)
-        .add_item(hide)
         .add_item(show)
         .add_native_item(SystemTrayMenuItem::Separator)
         .add_item(quit);
