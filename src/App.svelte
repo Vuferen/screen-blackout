@@ -9,10 +9,11 @@
 	import { onMount } from "svelte";
 	import { register } from '@tauri-apps/api/globalShortcut';
 
-	const monitors = availableMonitors();
+	let monitors;
 	let isInBlackout = false;
 
 	onMount(async () => {
+		monitors = await availableMonitors();
 		// Receive events from taskbar
 		await listen("blackout", (event) => {
 			showBlackouts();
@@ -44,13 +45,11 @@
 	async function spawnBlackoutWindows() {
 		let monitor = await currentMonitor();
 
-		(await monitors).forEach((screen) => {
+		monitors.forEach((screen) => {
 			if (screen.name != monitor.name) {
 				let windowLabel = screen.name.slice(screen.name.indexOf("D"));
-				windowLabel = windowLabel.replace("1", "One");
-				console.log(windowLabel);
-				console.log(screen.position);
-				const webview = new WebviewWindow(windowLabel, {
+				windowLabel = windowLabel.replace(/\d+/g, replacer);
+				new WebviewWindow(windowLabel, {
 					url: "blackout.html",
 					x: screen.position.x,
 					y: screen.position.y - 1,
@@ -61,20 +60,20 @@
 					resizable: false,
 					visible: false,
 				});
-
-				// webview.once("tauri://created", function () {
-				// 	// webview window successfully created
-				// 	console.log("Yay");
-				// });
-				// webview.once("tauri://error", function (e) {
-				// 	console.log(e);
-				// });
 			}
 		});
 	}
-	function closeBlackouts() {
-		emit("close");
+
+	// Function to replace 0-9 with A-J
+	function replacer(match) {
+		return match
+			.split('')     // convert string to array of characters
+			.map(Number)   // parse characters as numbers
+			.map(n => (n || 10) + 64)   // convert to char code, correcting for J
+			.map(c => String.fromCharCode(c))   // convert char codes to strings
+			.join('');     // join values together
 	}
+
 	function hideBlackouts() {
 		emit("hide");
 		isInBlackout = false;
@@ -87,9 +86,6 @@
 </script>
 
 <main class="container">
-	<!-- <h1>Lorem ipsum</h1> -->
-	<!-- <div class="mt-5">
-	</div> -->
 	{#if isInBlackout}
 		<button class="stop" on:click={() => hideBlackouts()}>Stop Blackout</button>
 	{:else}
