@@ -29,6 +29,7 @@ fn main() {
     let tray = SystemTray::new().with_menu(tray_menu);
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_store::Builder::default().build())
         .invoke_handler(tauri::generate_handler![greet])
         .system_tray(tray)
         .on_system_tray_event(|app, event| match event {

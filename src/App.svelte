@@ -8,11 +8,24 @@
 	} from "@tauri-apps/api/window";
 	import { onMount } from "svelte";
 	import { register } from '@tauri-apps/api/globalShortcut';
+	import { Store } from "tauri-plugin-store-api";
+
+	const store = new Store(".settings.dat");
 
 	let monitors;
 	let isInBlackout = false;
 
+	let hideOnStartup = true;
+
 	onMount(async () => {
+		console.log(hideOnStartup);
+		hideOnStartup = await store.get("hide-on-startup");
+		console.log(hideOnStartup);
+
+		if (!hideOnStartup) {
+			appWindow.show();
+		}
+
 		monitors = await availableMonitors();
 		// Receive events from taskbar
 		await listen("blackout", (event) => {
@@ -20,6 +33,11 @@
 		});
 		await listen("stop-blackout", (event) => {
 			hideBlackouts();
+		});
+
+		// Receive events from other windows
+		await listen("hide", (event) => {
+			isInBlackout = false;
 		});
 
 		appWindow.setDecorations(false);
@@ -64,6 +82,12 @@
 		});
 	}
 
+	async function toggleHideOnStartup() {
+		hideOnStartup = !hideOnStartup;
+		await store.set("hide-on-startup", hideOnStartup);
+		await store.save();
+	}
+
 	// Function to replace 0-9 with A-J
 	function replacer(match) {
 		return match
@@ -91,6 +115,7 @@
 	{:else}
 		<button class="start" on:click={() => showBlackouts()}>Start Blackout</button>
 	{/if}
+	<label for="hide-on-startup">Hide on startup: <input type="checkbox" name="hide-on-startup" checked={hideOnStartup} on:click={toggleHideOnStartup}></label>
 </main>
 
 <style>
