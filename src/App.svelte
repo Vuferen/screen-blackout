@@ -115,7 +115,7 @@
 	{:else}
 		<button class="start" on:click={() => showBlackouts()}>Start Blackout</button>
 	{/if}
-	<label for="hide-on-startup">Hide on startup: <input type="checkbox" name="hide-on-startup" checked={hideOnStartup} on:click={toggleHideOnStartup}></label>
+	<label class="setting-line" for="hide-on-startup">Hide on startup: <input type="checkbox" name="hide-on-startup" checked={hideOnStartup} on:click={toggleHideOnStartup}></label>
 </main>
 
 <style>
@@ -143,7 +143,7 @@
 		border:none;
 	}
 	button.start{
-		background-color: rgb(36, 40, 88);
+		background-color: rgb(28, 40, 73)
 	}
 	button.start:hover {
 		background-color: black;
@@ -156,5 +156,9 @@
 	}
 	.container{
 		height: 100%;
+	}
+	.setting-line {
+		align-self: baseline;
+		padding: 0.3em 1em;
 	}
 </style>

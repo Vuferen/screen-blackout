@@ -95,7 +95,7 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 200,
+        "height": 234,
         "resizable": false,
         "decorations": false,
         "title": "Screen Blackout",
